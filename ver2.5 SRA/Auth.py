@@ -4,17 +4,22 @@ from jose import jwt, JWTError
 from fastapi import HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
+from dotenv import load_dotenv
 import os
 
-JWT_SECRET    = os.getenv("JWT_SECRET", "change-this-secret")
+load_dotenv()
+
+# Fails loudly if JWT_SECRET is not set, instead of falling back to a guessable default.
+JWT_SECRET    = os.environ["JWT_SECRET"]
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE    = 60 * 2
 
+# Demo accounts for showcasing role-based access. Passwords come from the environment.
+# For production, use hashed passwords in a database (e.g. bcrypt), not a dict.
 _USERS = {
-    "admin":     {"password": "adminpass",  "role": "Admin",     "user_id": 1},
-    "assistant": {"password": "assistpass", "role": "Assistant", "user_id": 2},
+    "admin":     {"password": os.environ["ADMIN_PASSWORD"],     "role": "Admin",     "user_id": 1},
+    "assistant": {"password": os.environ["ASSISTANT_PASSWORD"], "role": "Assistant", "user_id": 2},
 }
-
 # HTTPBearer makes Swagger show the Authorize button (Bearer token input)
 _bearer = HTTPBearer(auto_error=True)
 
