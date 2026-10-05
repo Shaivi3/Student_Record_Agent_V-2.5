@@ -16,7 +16,7 @@ import argparse
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "mysql+pymysql://root:NewPassword123!@localhost:3306/student_db"
+    "mysql+pymysql://root:Password@localhost:3306/student_db"
 )
 
 engine = create_engine(DATABASE_URL, echo=False)
